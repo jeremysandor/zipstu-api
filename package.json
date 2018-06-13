@@ -1,0 +1,26 @@
+{
+  "name": "zipstu-api",
+  "version": "0.0.1",
+  "description": "zipstu API layer",
+  "main": "start.js",
+  "repository": "",
+  "author": "Jeremy Sandor",
+  "license": "ISC",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "babel-core": "^6.26.0",
+    "bluebird": "^3.5.1",
+    "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^3.2.6",
+    "moment": "^2.21.0",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.2"
+  }
+}
