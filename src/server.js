@@ -3,6 +3,7 @@ const rp = require( 'request-promise' );
 const bodyParser = require( 'body-parser' );
 const cookieParser = require( 'cookie-parser' );
 // const config = require( './config' );
+const middleware = require('./middleware');
 
 class Server {
   constructor( opts = {} ) {
@@ -13,7 +14,10 @@ class Server {
     this.app.use( bodyParser.json() );
     this.app.use( bodyParser.urlencoded() );
 
-    this.setupRoutes();
+    this.app.use(middleware.logRequest);
+    
+    this.setupPublicRoutes();
+    this.setupPrivateRoutes();  
   }
 
   async listen() {
@@ -25,14 +29,29 @@ class Server {
     })
   }
 
-  setupRoutes() {
-    this.app.get('/v1/provider', this.handleGetProviders.bind(this));
-    this.app.post('/v1/provider', this.handleCreateProvider.bind(this));
+
+  setupPublicRoutes() {
+    this.app.get('/v1/providers/:provider', this.handleGetProvider.bind(this));
+    this.app.get('/v1/providers', this.handleGetAllProviders.bind(this));
   }
 
-  async handleGetProviders( req, res ) {
+  setupPrivateRoutes() {
+    const authenticate = middleware.authenticate;
+    this.app.post('/v1/providers', authenticate, this.handleCreateProvider.bind(this));
+  }  
+
+  async handleGetProvider( req, res ) {
     try {
       res.json({foo: 'bar'});
+    } catch ( err ) {
+      res.json( { ok: false, message: err.message } );
+    }
+  }
+
+  async handleGetAllProviders( req, res ) {
+    console.log('here???');
+    try {
+      res.json([{foo: 'bar'}, {foo: 'baz'}]);
     } catch ( err ) {
       res.json( { ok: false, message: err.message } );
     }
