@@ -1,9 +1,12 @@
-const express = require( 'express' );
-const rp = require( 'request-promise' );
-const bodyParser = require( 'body-parser' );
-const cookieParser = require( 'cookie-parser' );
+const express = require('express');
+const rp = require('request-promise');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
 // const config = require( './config' );
+const pg = require('./sql');
 const middleware = require('./middleware');
+
 
 class Server {
   constructor( opts = {} ) {
@@ -51,7 +54,9 @@ class Server {
   async handleGetAllProviders( req, res ) {
     console.log('here???');
     try {
-      res.json([{foo: 'bar'}, {foo: 'baz'}]);
+      const foo = await pg.testSelect();
+      console.log('foo', foo);
+      res.json(foo);
     } catch ( err ) {
       res.json( { ok: false, message: err.message } );
     }
