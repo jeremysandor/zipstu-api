@@ -66,9 +66,9 @@ class Server {
     try {
       const {customerId, data} = req.body
       console.log('data', data)
-      const provider = await pg.createProvider(customerId, data)
+      const provider = await pg.upsertProvider(customerId, data)
       console.log('provider', provider)
-      res.json({foo: 'bar'})
+      res.json(provider)
     } catch ( err ) {
       res.json({ ok: false, message: err.message })
     }
