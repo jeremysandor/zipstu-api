@@ -18,6 +18,7 @@ class Server {
     this.app.use( bodyParser.urlencoded() )
 
     this.app.use(middleware.logRequest)
+    this.app.use(middleware.setupCors)
     
     this.setupPublicRoutes()
     this.setupPrivateRoutes()  
@@ -63,9 +64,10 @@ class Server {
   }
 
   async handleCreateProvider( req, res ) {
+    // console.log('req', req)
     try {
-      const {customerId, data} = req.body
-      console.log('data', data)
+      const { data }   = req.body
+      const customerId = req.customerId
       const provider = await pg.upsertProvider(customerId, data)
       console.log('provider', provider)
       res.json(provider)
