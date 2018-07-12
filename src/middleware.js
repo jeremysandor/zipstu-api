@@ -18,10 +18,10 @@ exports.authenticate = async (req, res, next) => {
     console.log('authentication err:', err)
     if (err) {
       res.status(401).send({ error: 'Not Authorized, please sign in' })
+    } else {
+      req.customerId = response.username
+      next()      
     }
-
-    req.customerId = response.username
-    next()
   })
   
 }
