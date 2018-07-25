@@ -1,9 +1,7 @@
 const express = require('express')
 const rp = require('request-promise')
 const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
 
-// const config = require( './config' )
 const pg = require('./sql')
 const middleware = require('./middleware')
 
@@ -13,7 +11,6 @@ class Server {
     this.port = opts.port || 45000
 
     this.app = express()
-    this.app.use( cookieParser() )
     this.app.use( bodyParser.json() )
     this.app.use( bodyParser.urlencoded() )
 
@@ -53,10 +50,8 @@ class Server {
   }
 
   async handleGetAllProviders( req, res ) {
-    console.log('here???')
     try {
-      const foo = await pg.testSelect()
-      console.log('foo', foo)
+      const foo = await pg.getProviders()
       res.json(foo)
     } catch ( err ) {
       res.json({ ok: false, message: err.message })
@@ -64,12 +59,10 @@ class Server {
   }
 
   async handleCreateProvider( req, res ) {
-    // console.log('req', req)
     try {
       const { data }   = req.body
       const customerId = req.customerId
       const provider = await pg.upsertProvider(customerId, data)
-      console.log('provider', provider)
       res.json(provider)
     } catch ( err ) {
       res.json({ ok: false, message: err.message })

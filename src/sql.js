@@ -11,7 +11,7 @@ pool.on('error', (err, client) => {
   process.exit(-1)
 })
 
-exports.testSelect = async () => {
+exports.getProviders = async () => {
   const client = await pool.connect()
   const res = await client.query('SELECT * FROM providers')
   client.release()
