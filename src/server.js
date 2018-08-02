@@ -32,18 +32,21 @@ class Server {
 
 
   setupPublicRoutes() {
-    this.app.get('/v1/providers/:provider', this.handleGetProvider.bind(this))
+    
     this.app.get('/v1/providers', this.handleGetAllProviders.bind(this))
   }
 
   setupPrivateRoutes() {
     const authenticate = middleware.authenticate
+    this.app.get('/v1/providers/:provider', authenticate, this.handleGetProvider.bind(this))
     this.app.post('/v1/providers', authenticate, this.handleCreateProvider.bind(this))
   }  
 
   async handleGetProvider( req, res ) {
     try {
-      res.json({foo: 'bar'})
+      const customerId = req.customerId
+      const provider = await pg.getProvider(customerId)
+      res.json(provider)
     } catch (err) {
       res.json({ ok: false, message: err.message })
     }
@@ -51,8 +54,8 @@ class Server {
 
   async handleGetAllProviders( req, res ) {
     try {
-      const foo = await pg.getProviders()
-      res.json(foo)
+      const providers = await pg.getProviders()
+      res.json(providers)
     } catch ( err ) {
       res.json({ ok: false, message: err.message })
     }

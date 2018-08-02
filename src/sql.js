@@ -18,6 +18,18 @@ exports.getProviders = async () => {
   return res.rows
 }
 
+exports.getProvider = async (customerId) => {
+  console.log('customerId', customerId)
+  const client = await pool.connect()
+  const sql = 'SELECT * FROM providers WHERE customer_id = ($1)'
+  const values = [customerId]
+  const res = await client.query(sql, values)
+  // const res = await client.query('SELECT * FROM providers WHERE customer_id IS "21e8b1e1-9d06-4f79-8701-6174809ebe43"')
+  console.log('getProvider res', res)
+  client.release()
+  return res.rows
+}
+
 /**
 * Creates or updates a provider
 * @param {postgres.connection} dbConnection 
