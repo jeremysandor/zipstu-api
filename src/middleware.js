@@ -12,9 +12,10 @@ exports.logRequest = (req, res, next) => {
 }
 
 exports.authenticate = async (req, res, next) => {
-  console.log('authenticate req', req.headers);
+  // console.log('authenticate req', req.headers);
   const accessTokenFromClient = req.headers['access-token'];
   cognitoExpress.validate(accessTokenFromClient, function(err, response) { 
+    console.log('authentication response:', response)
     console.log('authentication err:', err)
     if (err) {
       res.status(401).send({ error: 'Not Authorized, please sign in' })

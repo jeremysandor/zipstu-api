@@ -27,7 +27,7 @@ exports.getProvider = async (customerId) => {
   // const res = await client.query('SELECT * FROM providers WHERE customer_id IS "21e8b1e1-9d06-4f79-8701-6174809ebe43"')
   console.log('getProvider res', res)
   client.release()
-  return res.rows
+  return res.rows && res.rows[0]
 }
 
 /**
